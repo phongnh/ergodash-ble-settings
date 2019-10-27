@@ -7,6 +7,7 @@ enum ergodash_ble_layers {
   _QWERTY = 0,
   _LOWER,
   _RAISE,
+  _BLE,
   _MOUSE,
 };
 
@@ -30,33 +31,36 @@ enum ergodash_ble_keycodes {
   DEL_ID4,              /* Delete bonding of PeerID 4           */
   ENT_DFU,              /* Start bootloader                     */
   ENT_SLP,              /* Deep sleep mode                      */
-  QWERTY,
 };
 
 // Fillers to make layering more clear
 #define XXXXXXX KC_NO
 #define _______ KC_TRNS
-#define KC_JPN  LALT(KC_GRV)
-
 #define LWR_SPC LT(_LOWER, KC_SPC)      // Turn on _LOWER layer when held, Space when tapped
 #define RSE_ENT LT(_RAISE, KC_ENT)      // Turn on _RAISE layer when held, Enter when tapped
-#define RSE_BSP LT(_RAISE, KC_BSPC)     // Turn on _RAISE layer when held, Backspace when tapped
 #define MOU_SCL LT(_MOUSE, KC_SCLN)     // Turn on _MOUSE layer when held, ; when tapped
-#define CTL_ESC LCTL_T(KC_ESC)          // Left Control when held, Esc when tapped
+#define BLE_GRV LT(_BLE, KC_GRV)        // Turn on _BLE layer when held, ` when tapped
 #define CTL_ESC LCTL_T(KC_ESC)          // Left Control when held, Esc when tapped
 #define CTL_Z   LCTL_T(KC_Z)            // Left Control when held, z when tapped
-#define CTL_SCL LCTL_T(KC_SCLN)         // Left Control when held, ; when tapped
-#define CTL_GRV LCTL_T(KC_GRV)          // Left Control when held, ` when tapped
 #define CTL_SLS RCTL_T(KC_SLSH)         // Right Control when held, / when tapped
 #define GUI_QUO RGUI_T(KC_QUOT)         // Right Gui when held, " when tapped
-#define SFT_ENT RSFT_T(KC_ENT)          // Right Shift when held, Enter when tapped
-#define SFT_BSP RSFT_T(KC_BSPC)         // Right Shift when held, Backspace when tapped
-#define SFT_BSL RSFT_T(KC_BSLS)         // Right Shift when held, \ when tapped
 #define CAG_QUO LCAG_T(KC_QUOT)         // Ctrl+Alt+Gui when held, " when tapped
-#define CAG_PUP LCAG_T(KC_PGUP)         // Ctrl+Alt+Gui when held, Page Up when tapped
-#define CAG_PDN LCAG_T(KC_PGDN)         // Ctrl+Alt+Gui when held, Page Down when tapped
 #define CAG_LBR LCAG_T(KC_LBRC)         // Ctrl+Alt+Gui when held, [ when tapped
 #define CAG_RBR LCAG_T(KC_RBRC)         // Ctrl+Alt+Gui when held, ] when tapped
+
+// BLE
+#define KC_RST   ENT_DFU
+#define KC_BATT  BATT_LV
+#define KC_BTON  BLE_EN
+#define KC_BTOF  BLE_DIS
+#define KC_USBON USB_EN
+#define KC_USBOF USB_DIS
+#define KC_BTNEW AD_WO_L
+#define KC_BTID0 ADV_ID0
+#define KC_BTID1 ADV_ID1
+#define KC_BTID2 ADV_ID2
+#define KC_BTID3 ADV_ID3
+#define KC_BTID4 ADV_ID4
 
 const uint16_t keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   /*
@@ -69,7 +73,7 @@ const uint16_t keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
    * ├────────┼────────┼────────┼────────┼────────┼────────┼────────┼────────┐     ┌────────┼────────┼────────┼────────┼────────┼────────┼────────┼────────┤
    * │ Shift  │ Z / CTL│   X    │   C    │   V    │   B    │ Space  │  Home  │     │  End   │  Enter │  N     │   M    │   ,    │   .    │ / / CTL│Sft/BkSp│
    * ├────────┼────────┼────────┼────────┼────┬───┴────┬─┬─┼────────┼────────┤     ├────────┼────────┼───┬────┴───┬────┼────────┼────────┼────────┼────────┤
-   * │  Ctrl  │ CAG / '│  Alt   │  GUI   ││││││LWR/ SPC│││││ Space  │ BkSpace│     │  Tab   │  Enter │││││RSE/ ENT││││││  Left  │  Down  │   Up   │  Right │
+   * │ BLE / `│ CAG / '│  Alt   │  GUI   ││││││LWR/ SPC│││││ Space  │ BkSpace│     │  Tab   │  Enter │││││RSE/ ENT││││││  Left  │  Down  │   Up   │  Right │
    * └────────┴────────┴────────┴────────┴────┴────────┴─┴─┴────────┴────────┘     └────────┴────────┴─┴─┴────────┴────┴────────┴────────┴────────┴────────┘
    */
   [_QWERTY] = LAYOUT( \
@@ -77,7 +81,7 @@ const uint16_t keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     KC_TAB,  KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,    KC_LBRC,                          KC_RBRC, KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_BSLS, \
     CTL_ESC, KC_A,    KC_S,    KC_D,    KC_F,    KC_G,    KC_PGUP,                          KC_PGDN, KC_H,    KC_J,    KC_K,    KC_L,    MOU_SCL, GUI_QUO, \
     KC_LSFT, CTL_Z,   KC_X,    KC_C,    KC_V,    KC_B,             KC_HOME,        KC_END,           KC_N,    KC_M,    KC_COMM, KC_DOT,  CTL_SLS, KC_RSFT, \
-    CTL_GRV, CAG_QUO, KC_LALT, KC_LGUI,     LWR_SPC,      KC_SPC , KC_BSPC,        KC_ENT,  KC_ENT,      RSE_ENT,      KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT  \
+    BLE_GRV, CAG_QUO, KC_LALT, KC_LGUI,     LWR_SPC,      KC_SPC , KC_BSPC,        KC_TAB,  KC_ENT,      RSE_ENT,      KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT  \
   ),
 
   /*
@@ -86,7 +90,7 @@ const uint16_t keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
    * ├────────┼────────┼────────┼────────┼────────┼────────┼────────┤                       ├────────┼────────┼────────┼────────┼────────┼────────┼────────┤
    * │   ~    │   !    │   @    │   #    │   $    │   %    │        │                       │        │   ^    │   &    │   *    │   (    │   )    │   |    │
    * ├────────┼────────┼────────┼────────┼────────┼────────┼────────┤                       ├────────┼────────┼────────┼────────┼────────┼────────┼────────┤
-   * │        │        │        │        │        │        │        │                       │        │        │        │        │        │        │        │
+   * │Capslock│        │        │        │        │        │        │                       │        │        │        │        │        │        │        │
    * ├────────┼────────┼────────┼────────┼────────┼────────┼────────┼────────┐     ┌────────┼────────┼────────┼────────┼────────┼────────┼────────┼────────┤
    * │        │        │        │        │        │        │        │        │     │        │        │        │        │        │        │        │        │
    * ├────────┼────────┼────────┼────────┼────┬───┴────┬─┬─┼────────┼────────┤     ├────────┼────────┼───┬────┴───┬────┼────────┼────────┼────────┼────────┤
@@ -96,7 +100,7 @@ const uint16_t keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   [_LOWER] = LAYOUT(
     KC_F12,  KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,   _______,                          _______, KC_F6,   KC_F7,   KC_F8,   KC_F9,   KC_F10,  KC_F11,  \
     KC_TILD, KC_EXLM, KC_AT,   KC_HASH, KC_DLR,  KC_PERC, _______,                          _______, KC_CIRC, KC_AMPR, KC_ASTR, KC_LPRN, KC_RPRN, KC_PIPE, \
-    AD_WO_L, ADV_ID0, ADV_ID1, ADV_ID2, ADV_ID3, ADV_ID4, _______,                          _______, _______, _______, _______, _______, _______, _______, \
+    KC_CAPS, _______, _______, _______, _______, _______, _______,                          _______, _______, _______, _______, _______, _______, _______, \
     _______, _______, _______, _______, _______, _______,          _______,        _______,          _______, _______, _______, _______, _______, _______, \
     _______, _______, _______, _______,     _______,      _______, _______,        _______, _______,      _______,     _______, _______, _______, _______  \
   ),
@@ -107,7 +111,7 @@ const uint16_t keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
    * ├────────┼────────┼────────┼────────┼────────┼────────┼────────┤                       ├────────┼────────┼────────┼────────┼────────┼────────┼────────┤
    * │   ~    │   !    │   @    │   #    │   $    │   %    │        │                       │        │   ^    │   &    │   *    │   (    │   )    │   |    │
    * ├────────┼────────┼────────┼────────┼────────┼────────┼────────┤                       ├────────┼────────┼────────┼────────┼────────┼────────┼────────┤
-   * │        │        │        │        │        │        │        │                       │        │        │        │        │        │        │        │
+   * │Capslock│        │        │        │        │        │        │                       │        │        │        │        │        │        │        │
    * ├────────┼────────┼────────┼────────┼────────┼────────┼────────┼────────┐     ┌────────┼────────┼────────┼────────┼────────┼────────┼────────┼────────┤
    * │        │        │        │        │        │        │        │        │     │        │        │        │        │        │        │        │        │
    * ├────────┼────────┼────────┼────────┼────┬───┴────┬─┬─┼────────┼────────┤     ├────────┼────────┼───┬────┴───┬────┼────────┼────────┼────────┼────────┤
@@ -117,8 +121,31 @@ const uint16_t keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   [_RAISE] = LAYOUT(
     KC_F12,  KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,   _______,                          _______, KC_F6,   KC_F7,   KC_F8,   KC_F9,   KC_F10,  KC_F11,  \
     KC_TILD, KC_EXLM, KC_AT,   KC_HASH, KC_DLR,  KC_PERC, _______,                          _______, KC_CIRC, KC_AMPR, KC_ASTR, KC_LPRN, KC_RPRN, KC_PIPE, \
-    AD_WO_L, ADV_ID0, ADV_ID1, ADV_ID2, ADV_ID3, ADV_ID4, _______,                          _______, _______, _______, _______, _______, _______, _______, \
+    KC_CAPS, _______, _______, _______, _______, _______, _______,                          _______, _______, _______, _______, _______, _______, _______, \
     _______, _______, _______, _______, _______, _______,          _______,        _______,          _______, _______, _______, _______, _______, _______, \
+    _______, _______, _______, _______,     _______,      _______, _______,        _______, _______,      _______,     _______, _______, _______, _______  \
+  ),
+
+
+  /*
+   * ┌────────┬────────┬────────┬────────┬────────┬────────┬────────┐                       ┌────────┬────────┬────────┬────────┬────────┬────────┬────────┐
+   * │        │        │        │        │        │        │        │                       │        │        │        │        │        │        │        │
+   * ├────────┼────────┼────────┼────────┼────────┼────────┼────────┤                       ├────────┼────────┼────────┼────────┼────────┼────────┼────────┤
+   * │        │        │        │        │        │        │        │                       │        │        │        │        │        │        │        │
+   * ├────────┼────────┼────────┼────────┼────────┼────────┼────────┤                       ├────────┼────────┼────────┼────────┼────────┼────────┼────────┤
+   * │        │        │        │        │        │        │        │                       │        │        │        │        │        │        │        │
+   * ├────────┼────────┼────────┼────────┼────────┼────────┼────────┼────────┐     ┌────────┼────────┼────────┼────────┼────────┼────────┼────────┼────────┤
+   * │        │        │        │        │        │        │        │        │     │        │        │        │        │        │        │        │        │
+   * ├────────┼────────┼────────┼────────┼────┬───┴────┬─┬─┼────────┼────────┤     ├────────┼────────┼───┬────┴───┬────┼────────┼────────┼────────┼────────┤
+   * │        │        │        │        ││││││        │││││        │        │     │        │        │││││        ││││││        │        │        │        │
+   * └────────┴────────┴────────┴────────┴────┴────────┴─┴─┴────────┴────────┘     └────────┴────────┴─┴─┴────────┴────┴────────┴────────┴────────┴────────┘
+   *
+   */
+  [_BLE] = LAYOUT(
+    AD_WO_L, ADV_ID0, ADV_ID1, ADV_ID2, ADV_ID3, ADV_ID4, _______,                          _______, _______, _______, _______, _______, _______, _______, \
+    DELBNDS, DEL_ID0, DEL_ID1, DEL_ID2, DEL_ID3, DEL_ID4, _______,                          _______, _______, _______, _______, _______, _______, _______, \
+    ENT_DFU, USB_DIS, USB_EN,  BLE_DIS, BLE_EN,  BATT_LV, _______,                          _______, _______, _______, _______, _______, _______, _______, \
+    ENT_SLP, _______, _______, _______, _______, _______,          _______,        _______,          _______, _______, _______, _______, _______, _______, \
     _______, _______, _______, _______,     _______,      _______, _______,        _______, _______,      _______,     _______, _______, _______, _______  \
   ),
 
@@ -136,7 +163,7 @@ const uint16_t keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
    * └────────┴────────┴────────┴────────┴────┴────────┴─┴─┴────────┴────────┘     └────────┴────────┴─┴─┴────────┴────┴────────┴────────┴────────┴────────┘
    */
   [_MOUSE] = LAYOUT(
-    _______, _______, _______, _______, _______, _______, _______,                          _______, _______, _______, _______, _______, _______, _______, \
+    RESET,   _______, _______, _______, _______, _______, AG_NORM,                          AG_SWAP, _______, _______, _______, _______, _______, _______, \
     _______, _______, KC_BTN3, KC_MS_U, KC_BTN2, _______, _______,                          _______, _______, KC_BTN2, KC_WH_U, KC_BTN3, _______, _______, \
     _______, KC_BTN1, KC_MS_L, KC_MS_D, KC_MS_R, KC_BTN1, _______,                          _______, KC_BTN1, KC_WH_L, KC_WH_D, KC_WH_R, _______, _______, \
     _______, _______, _______, _______, _______, _______,          _______,        _______,          _______, _______, _______, _______, _______, _______, \
@@ -166,23 +193,28 @@ const uint16_t keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
    */
 };
 
-void persistent_default_layer_set(uint16_t default_layer) {
-  eeconfig_update_default_layer(default_layer);
-  default_layer_set(default_layer);
-  layer_state_set(default_layer);
-}
+// void persistent_default_layer_set(uint16_t default_layer) {
+//   eeconfig_update_default_layer(default_layer);
+//   default_layer_set(default_layer);
+//   layer_state_set(default_layer);
+// }
+
+// uint32_t layer_state_set_user(uint32_t state) {
+//   return update_tri_layer_state(state, _LOWER, _RAISE, _ADJUST);
+// }
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
   char str[16];
-
   if (record->event.pressed) {
     switch (keycode) {
       case DELBNDS:
         delete_bonds();
         return false;
+        break;
       case AD_WO_L:
         restart_advertising_wo_whitelist();
         return false;
+        break;
       case USB_EN:
         set_usb_enabled(true);
         return false;
@@ -202,37 +234,48 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
       case ADV_ID0:
         restart_advertising_id(0);
         return false;
+        break;
       case ADV_ID1:
         restart_advertising_id(1);
         return false;
+        break;
       case ADV_ID2:
         restart_advertising_id(2);
         return false;
+        break;
       case ADV_ID3:
         restart_advertising_id(3);
         return false;
+        break;
       case ADV_ID4:
         restart_advertising_id(4);
         return false;
+        break;
       case DEL_ID0:
         delete_bond_id(0);
         return false;
+        break;
       case DEL_ID1:
         delete_bond_id(1);
         return false;
+        break;
       case DEL_ID2:
         delete_bond_id(2);
         return false;
+        break;
       case DEL_ID3:
         delete_bond_id(3);
         return false;
+        break;
       case BATT_LV:
         sprintf(str, "%4dmV", get_vcc());
         send_string(str);
         return false;
+        break;
       case ENT_DFU:
         bootloader_jump();
         return false;
+        break;
     }
   } else if (!record->event.pressed) {
     switch (keycode) {
